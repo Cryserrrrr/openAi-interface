@@ -4,7 +4,7 @@ import styled from 'styled-components';
 import Image from 'next/image';
 
 import { Theme } from '@/models/models';
-import chatgptIcon from '../asset/chatgpticon.svg';
+import logoSmallWhite from '../asset/logo_small_white.png';
 
 const Container = styled.div`
   display: flex;
@@ -19,10 +19,6 @@ const Container = styled.div`
   border-radius: 10px;
 
   transition: .5s;
-`;
-
-const Logo = styled(Image)`
-  height: 50px;
 `;
 
 const Slider = styled.span`
@@ -80,7 +76,7 @@ export default function NavBar({ handleTheme, theme }: { handleTheme: any, theme
 
   return (
     <Container theme={theme}>
-      <Logo src={chatgptIcon} alt="logo" width={40}/>
+      <Image src={logoSmallWhite} alt="logo" height={40}/>
       <Switch>
         <Checkbox type="checkbox" onChange={handleTheme} theme={theme}/>
         <Slider theme={theme}/>

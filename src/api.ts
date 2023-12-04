@@ -23,7 +23,7 @@ export const gptCompletion = async (
     model: openaiModelsMap[model],
     messages: openaiMessages,
     stream: true,
-    max_tokens: 300,
+    max_tokens: 1000,
   });
 
   for await (const message of gptResponse) {
@@ -34,5 +34,4 @@ export const gptCompletion = async (
   }
   setAbortRequest(false);
   setLoading(false);
-  return gptResponse;
 }

@@ -1,6 +1,6 @@
 #  OpenAI Interface
 
-![technology](https://github.com/Cryserrrrr/openAi-interface/assets/66973532/776cdaa0-e06a-459f-ac5e-0b1be5d70361)
+![technology (1)](https://github.com/Cryserrrrr/openAi-interface/assets/66973532/c5a3479a-c1a3-482a-b866-5ba891cc7d8f)
 
  ## Table des matières
 1. [Introduction](#introduction)

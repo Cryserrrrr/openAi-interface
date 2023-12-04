@@ -20,7 +20,7 @@ export const sendRequest = async (
   })
   const openaiMessages: openaiMessage[] = []
     tempMessages.forEach(message => {
-      if (message.image) {
+      if (message.image && model === models.GPTVision) {
         openaiMessages.push({
           content: [
             {

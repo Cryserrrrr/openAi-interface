@@ -12,7 +12,7 @@ export const gptCompletion = async (messages: any[], model: models) => {
   const gptResponse = await openai.chat.completions.create({
     model: openaiModelsMap[model],
     messages: messages,
-    max_tokens: 300,
+    max_tokens: 1000,
   });
   return gptResponse;
 }

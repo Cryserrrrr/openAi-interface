@@ -21,6 +21,7 @@ interface InputBarProps {
   inputValue: string;
   setInputValue: any;
   handleRequest: any;
+  textareaRef: any
 }
 
 interface InputContainerProps {
@@ -41,7 +42,7 @@ const Container = styled.div<ContainerProps>`
   justify-content: flex-end;
   align-items: flex-start;
   flex-direction: column;
-  height: ${props => props.haveimage ? '200px' : '50px'};
+  min-height: ${props => props.haveimage ? '200px' : '50px'};
   width: 50%;
   color: #fff;
   border-radius: 10px;
@@ -52,7 +53,7 @@ const Container = styled.div<ContainerProps>`
 const SubContainer = styled.div`
   display: flex;
   justify-content: space-between;
-  align-items: center;
+  align-items: flex-end;
   width: 100%;
 `;
 
@@ -71,15 +72,14 @@ const InputContainer = styled.div<InputContainerProps>`
 
 const Input = styled.textarea<InputProps>`
   width: ${props => props.haveicon ? '85%' : '100%'};
-  max-height: 200px;
-  min-height: 50px;
   background-color: transparent;
+  max-height: 200px;
   border: none;
   color: #fff;
   font-size: 1.4em;
   outline: none;
   padding: 0 10px;
-  overflow: hidden;
+  overflow-y: auto;
   resize: none;
 
   &::placeholder {
@@ -150,10 +150,10 @@ export default function InputBar({
   inputValue,
   setInputValue,
   handleRequest,
+  textareaRef,
 } : InputBarProps ) {
 
   const [haveicon, setHaveicon] = useState<boolean>(false);
-  const textareaRef = useRef(null);
 
   useEffect(() => {
     const textarea = textareaRef.current;
@@ -191,8 +191,14 @@ export default function InputBar({
   }
 
   const handleKeyPress = (e: any) => {
+    if (e.key === 'Enter' && e.shiftKey) {
+      return;
+    }
     if (e.key === 'Enter') {
       e.preventDefault();
+      const textarea = textareaRef.current;
+      textarea.style.height = 'auto';
+      textarea.style.height = `${textarea.scrollHeight}px`;
       handleRequest();
     }
   }

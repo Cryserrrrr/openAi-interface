@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 
 import styled from 'styled-components';
 import Image from 'next/image';
@@ -17,7 +17,6 @@ import NavBar from '../components/navBar';
 import InputBar from '../components/inputBar';
 import Modal from '../components/modal';
 import ChatSection from '@/components/chatSection';
-import { send } from 'process';
 
 const Container = styled.div`
   display: flex;
@@ -57,6 +56,8 @@ const choices = [
 ];
 
 export default function Home() {
+
+  const textareaRef = useRef(null);
 
   const [theme, setTheme] = useState<Theme>(blackTheme);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -112,6 +113,7 @@ export default function Home() {
         messages={messages}
         image={image}
         theme={theme}
+        textareaRef={textareaRef}
       />
       <InputBar 
         theme={theme}
@@ -122,6 +124,7 @@ export default function Home() {
         inputValue={inputValue}
         setInputValue={setInputValue}
         handleRequest={handleRequest}
+        textareaRef={textareaRef}
       />
     </Container>
   )

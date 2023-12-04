@@ -17,6 +17,7 @@ import MarkdownReader from '@/utils/markdownReader';
 
 interface ContainerProps {
   image: string | null;
+  textareaRef: any;
 }
 
 interface MessageBoxProps {
@@ -25,7 +26,7 @@ interface MessageBoxProps {
 }
 
 const Container = styled.div<ContainerProps>`
-  max-height: ${props => props.image ? 'calc(100vh - 400px)' : 'calc(100vh - 250px)'};
+  max-height: ${props => props.image ? 'calc(100vh - 400px)' : `calc(100vh - 200px - ${props.textareaRef}px)`};
   width: 50%;
   color: #fff;
   border-radius: 10px;
@@ -33,7 +34,7 @@ const Container = styled.div<ContainerProps>`
   overflow-x: hidden;
   display: flex;
   flex-direction: column;
-  margin-top: 100px;
+  margin: 20px 0;
 
   transition: .5s;
 `;
@@ -92,7 +93,7 @@ const TextBox = styled.div`
   transition: .5s;
 `;
 
-export default function ChatSection({ messages, image, theme } : { messages: Message[], image: string | null, theme: Theme } ) {
+export default function ChatSection({ messages, image, theme, textareaRef } : { messages: Message[], image: string | null, theme: Theme, textareaRef: any } ) {
 
   const renderIcon = (message: Message) => {
     if (message.model === 'GPT-4' && !message.isUser) {
@@ -136,7 +137,7 @@ export default function ChatSection({ messages, image, theme } : { messages: Mes
     })
   }
   return (
-    <Container image={image}>
+    <Container image={image} textareaRef={textareaRef?.current?.clientHeight}>
       {renderMessages()}
     </Container>
   )

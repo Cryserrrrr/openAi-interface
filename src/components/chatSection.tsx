@@ -34,6 +34,8 @@ const Container = styled.div<ContainerProps>`
   display: flex;
   flex-direction: column;
   margin-top: 100px;
+
+  transition: .5s;
 `;
 
 const MessageBox = styled.div<MessageBoxProps>`
@@ -46,6 +48,8 @@ const MessageBox = styled.div<MessageBoxProps>`
   border-radius: 10px;
   line-height: 1.5em;
   margin-bottom: 10px;
+
+  transition: .5s;
 `;
 
 const IconContainer = styled.div`
@@ -62,6 +66,8 @@ const ImageDiv = styled.div`
   justify-content: center;
   align-items: center;
   border-radius: 10px;
+
+  transition: .5s;
 `;
 
 const ImageBox = styled.div`
@@ -72,6 +78,8 @@ const ImageBox = styled.div`
   justify-content: center;
   align-items: center;
   border-radius: 10px 10px 0 10px;
+
+  transition: .5s;
 `;
 
 const TextBox = styled.div`
@@ -79,6 +87,9 @@ const TextBox = styled.div`
   align-items: center;
   flex-direction: column;
   height: 100%;
+  color: ${props => props.theme.colorChat};
+
+  transition: .5s;
 `;
 
 export default function ChatSection({ messages, image, theme } : { messages: Message[], image: string | null, theme: Theme } ) {
@@ -114,7 +125,7 @@ export default function ChatSection({ messages, image, theme } : { messages: Mes
           <IconContainer>
             {renderIcon(message)}
           </IconContainer>
-          <TextBox>
+          <TextBox theme={theme}>
             {message.image && (
               <Image src={message.image} width={200} height={200} alt='User Image'/>
             )}

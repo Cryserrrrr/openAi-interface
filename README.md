@@ -15,7 +15,8 @@
 
 Welcome to the OpenAI Interface repository! This project provides a user-friendly interface to interact with various OpenAI models, including GPT-4, GPT-3, GPT-Vision, Text-to-Speech, Speech-to-Text, and DALL-E 3. You can seamlessly integrate these models into a conversation, making it easy to explore the capabilities of OpenAI's powerful technologies.
 
-![gpt-interface](https://github.com/Cryserrrrr/openAi-interface/assets/66973532/e0f7aaad-9b16-4bee-bc2a-bbf495b0c598)
+# Ui
+![gpt-interface](https://github.com/Cryserrrrr/openAi-interface/assets/66973532/f83d8ed7-e9e8-46c1-b630-c00999ba3bbb)
 
 The application is built using Next.js for the frontend and Styled Components for styling. To get started, follow the setup instructions below.
 

@@ -38,6 +38,28 @@
   --callout-border-rgb: 172, 175, 176;
   --card-rgb: 180, 185, 188;
   --card-border-rgb: 131, 134, 135;
+
+  
+}
+
+/* Firefox */
+* {
+  scrollbar-width: auto;
+  scrollbar-color: #1a1a1a transparent;
+}
+
+/* Chrome, Edge, and Safari */
+*::-webkit-scrollbar {
+  width: 10px;
+}
+
+*::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+*::-webkit-scrollbar-thumb {
+  background-color: #c2c2c2;
+  border-radius: 10px;
 }
 
 @media (prefers-color-scheme: dark) {

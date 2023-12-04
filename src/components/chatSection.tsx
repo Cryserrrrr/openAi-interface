@@ -35,6 +35,7 @@ const Container = styled.div<ContainerProps>`
   display: flex;
   flex-direction: column;
   margin: 20px 0;
+  padding-right: 10px;
 
   transition: .5s;
 `;
@@ -137,7 +138,7 @@ export default function ChatSection({ messages, image, theme, textareaRef } : { 
     })
   }
   return (
-    <Container image={image} textareaRef={textareaRef?.current?.clientHeight}>
+    <Container image={image} textareaRef={textareaRef?.current?.clientHeight ? textareaRef.current.clientHeight : 0}>
       {renderMessages()}
     </Container>
   )

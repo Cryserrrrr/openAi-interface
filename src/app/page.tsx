@@ -43,6 +43,8 @@ const Button = styled.div`
   position: absolute;
   top: 20px;
   left: 20px;
+
+  transition: .5s;
 `;
 
 const choices = [

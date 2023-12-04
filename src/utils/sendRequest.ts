@@ -7,6 +7,9 @@ export const sendRequest = async (
   model: models,
   setInputValue: (value: string) => void,
   setMessages: (value: Message[]) => void,
+  abortRequest: boolean,
+  setAbortRequest: (value: boolean) => void,
+  setLoading: (value: boolean) => void,
   image?: string | null,
   setImage?: (value: string | null) => void,
 ) => {
@@ -51,5 +54,5 @@ export const sendRequest = async (
     model: model,
   })
   setMessages(tempMessages);
-  gptCompletion(openaiMessages, model, tempMessages, setMessages);
+  gptCompletion(openaiMessages, model, tempMessages, setMessages, abortRequest, setAbortRequest, setLoading);
 }  

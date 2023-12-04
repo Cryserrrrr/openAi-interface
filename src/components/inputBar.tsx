@@ -11,6 +11,7 @@ import { models, Theme } from '@/models/models';
 import Image from 'next/image';
 import photo from '../asset/photo.svg';
 import cross from '../asset/cross.svg';
+import stop from '../asset/stop.svg';
 
 interface InputBarProps {
   theme: Theme;
@@ -21,7 +22,10 @@ interface InputBarProps {
   inputValue: string;
   setInputValue: any;
   handleRequest: any;
-  textareaRef: any
+  textareaRef: any;
+  loading: boolean;
+  abortRequest: boolean;
+  setAbortRequest: any;
 }
 
 interface InputContainerProps {
@@ -140,6 +144,21 @@ const DeleteButton = styled.div`
   cursor: pointer;
 `;
 
+const AbortButton = styled.div`
+  height: 50px;
+  width: 300px;
+  background-color: ${props => props.theme.primary};
+  border-radius: 10px;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 1.2em;
+`;
+
+const StyledStop = styled(Image)`
+  margin-right: 15px;
+`;
 
 export default function InputBar({ 
   theme,
@@ -151,6 +170,9 @@ export default function InputBar({
   setInputValue,
   handleRequest,
   textareaRef,
+  loading,
+  abortRequest,
+  setAbortRequest,
 } : InputBarProps ) {
 
   const [haveicon, setHaveicon] = useState<boolean>(false);
@@ -216,17 +238,24 @@ export default function InputBar({
         </ImagePreviewContainer>
       }
       <SubContainer>
-        <InputContainer theme={theme} image={image && model === models.GPTVision}>
-          <Input 
-            placeholder="Type your message..."
-            onChange={(e: any) => handleChange(e)}
-            value={inputValue}
-            ref={textareaRef}
-            haveicon={haveicon}
-            onKeyDown={handleKeyPress}
-          />
-          {model === 'GPT-Vision' && <StyledImage src={photo} alt="camera" onClick={openFolder}/>}
-        </InputContainer>
+        {loading && !abortRequest ?
+          <AbortButton theme={theme} onClick={() => setAbortRequest(true)}>
+            <StyledStop src={stop} alt="stop" width={20} height={20} />
+            Stop the generation
+          </AbortButton>
+        :
+          <InputContainer theme={theme} image={image && model === models.GPTVision}>
+            <Input 
+              placeholder="Type your message..."
+              onChange={(e: any) => handleChange(e)}
+              value={inputValue}
+              ref={textareaRef}
+              haveicon={haveicon}
+              onKeyDown={handleKeyPress}
+            />
+            {model === 'GPT-Vision' && <StyledImage src={photo} alt="camera" onClick={openFolder}/>}
+          </InputContainer>
+        }
         <Select theme={theme} onClick={handleModal}>
           {model}
         </Select>

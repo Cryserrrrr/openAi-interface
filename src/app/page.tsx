@@ -1,95 +1,126 @@
-import Image from 'next/image'
-import styles from './page.module.css'
+'use client';
+
+import { useEffect, useState } from 'react';
+
+import styled from 'styled-components';
+import Image from 'next/image';
+import { whiteTheme, blackTheme } from '@/utils/theme';
+import { Message, models, Theme } from '@/models/models';
+
+// Images
+import menu from '../asset/hamburger.svg';
+
+// Send Request
+import { sendRequest } from '@/utils/sendRequest';
+
+import NavBar from '../components/navBar';
+import InputBar from '../components/inputBar';
+import Modal from '../components/modal';
+import ChatSection from '@/components/chatSection';
+import { send } from 'process';
+
+const Container = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  height: 100vh;
+  background-color: ${props => props.theme.background};
+
+  transition: .5s;
+`;
+
+const Button = styled.div`
+  width: 60px;
+  height: 60px;
+  border-radius: 10px;
+  border: 3px solid ${props => props.theme.primary};
+  background-color: transparent;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+  top: 20px;
+  left: 20px;
+`;
+
+const choices = [
+  'GPT-4',
+  'GPT-3',
+  'GPT-Vision',
+  'Text-To-Speech',
+  'Speech-To-Text',
+  'Dall-E 3',
+];
 
 export default function Home() {
+
+  const [theme, setTheme] = useState<Theme>(blackTheme);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [model, setModel] = useState<models>(models.GPT4);
+  const [isSideBarOpen, setIsSideBarOpen] = useState(false);
+  const [image, setImage] = useState<File | null>(null);
+  const [inputValue, setInputValue] = useState('');
+  const [messages, setMessages] = useState<Message[]>([
+    {
+      text: 'Hello, I am ChatGPT',
+      isUser: false,
+      model: models.GPT4,
+    },
+  ]);
+
+  useEffect(() => {
+    setIsModalOpen(false)
+    if (messages.length === 1) {
+      setMessages([
+        {
+          text: `Hello, I am ${model}`,
+          isUser: false,
+          model: model,
+        }
+      ])
+    }
+  }, [model])
+
+  const handleTheme = () => {
+    if (theme === whiteTheme) {
+      setTheme(blackTheme);
+    } else if (theme === blackTheme) {
+      setTheme(whiteTheme);
+    }
+  }
+
+  const handleModal = () => {
+    setIsModalOpen(!isModalOpen)
+  }
+
+  const handleRequest = () => {
+    sendRequest(inputValue, messages, model, setInputValue, setMessages, image, setImage)
+  }
+
   return (
-    <main className={styles.main}>
-      <div className={styles.description}>
-        <p>
-          Get started by editing&nbsp;
-          <code className={styles.code}>src/app/page.tsx</code>
-        </p>
-        <div>
-          <a
-            href="https://vercel.com?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            By{' '}
-            <Image
-              src="/vercel.svg"
-              alt="Vercel Logo"
-              className={styles.vercelLogo}
-              width={100}
-              height={24}
-              priority
-            />
-          </a>
-        </div>
-      </div>
-
-      <div className={styles.center}>
-        <Image
-          className={styles.logo}
-          src="/next.svg"
-          alt="Next.js Logo"
-          width={180}
-          height={37}
-          priority
-        />
-      </div>
-
-      <div className={styles.grid}>
-        <a
-          href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Docs <span>-&gt;</span>
-          </h2>
-          <p>Find in-depth information about Next.js features and API.</p>
-        </a>
-
-        <a
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Learn <span>-&gt;</span>
-          </h2>
-          <p>Learn about Next.js in an interactive course with&nbsp;quizzes!</p>
-        </a>
-
-        <a
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Templates <span>-&gt;</span>
-          </h2>
-          <p>Explore starter templates for Next.js.</p>
-        </a>
-
-        <a
-          href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Deploy <span>-&gt;</span>
-          </h2>
-          <p>
-            Instantly deploy your Next.js site to a shareable URL with Vercel.
-          </p>
-        </a>
-      </div>
-    </main>
+    <Container theme={theme}>
+      <Button onClick={() => setIsSideBarOpen(!isSideBarOpen)} theme={theme}>
+        <Image src={menu} width={40} height={40} alt="menu" />
+      </Button>
+      <NavBar handleTheme={handleTheme} theme={theme}/>
+      {isModalOpen && <Modal choices={choices} model={model} setModel={setModel} theme={theme}/>}
+      <ChatSection
+        messages={messages}
+        image={image}
+        theme={theme}
+      />
+      <InputBar 
+        theme={theme}
+        handleModal={handleModal}
+        model={model}
+        image={image}
+        setImage={setImage}
+        inputValue={inputValue}
+        setInputValue={setInputValue}
+        handleRequest={handleRequest}
+      />
+    </Container>
   )
 }

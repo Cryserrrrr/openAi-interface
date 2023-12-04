@@ -2,6 +2,7 @@
 
 import Image from 'next/image';
 import styled from 'styled-components';
+import { useEffect, useRef } from 'react';
 
 // Images
 import user from '../asset/user.svg';
@@ -96,6 +97,19 @@ const TextBox = styled.div`
 
 export default function ChatSection({ messages, image, theme, textareaRef } : { messages: Message[], image: string | null, theme: Theme, textareaRef: any } ) {
 
+  const containerRef = useRef(null);
+
+  const scrollToBottom = () => {
+    if (containerRef.current) {
+      // @ts-ignore
+      containerRef.current?.scrollIntoView({ behavior: "smooth" })
+    }
+  }
+
+  useEffect(() => {
+    scrollToBottom()
+  }, [messages])
+
   const renderIcon = (message: Message) => {
     if (message.isUser) {
       return (
@@ -132,8 +146,12 @@ export default function ChatSection({ messages, image, theme, textareaRef } : { 
     })
   }
   return (
-    <Container image={image} textareaRef={textareaRef?.current?.clientHeight ? textareaRef.current.clientHeight : 0}>
+    <Container 
+      image={image}
+      textareaRef={textareaRef?.current?.clientHeight ? textareaRef.current.clientHeight : 0}
+    >
       {renderMessages()}
+      <div ref={containerRef}></div>
     </Container>
   )
 }

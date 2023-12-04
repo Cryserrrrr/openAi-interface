@@ -18,9 +18,8 @@ const Container = styled.div`
   transition: .5s;
 `;
 
-const Title = styled.h1`
+const Title = styled.h2`
   color: #fff;
-  font-size: 2em;
   margin: 20px 0;
 `;
 
@@ -40,7 +39,7 @@ const Choice = styled.div`
   justify-content: center;
   align-items: center;
   color: ${props => props.theme.unselected};
-  font-size: 1.5em;
+  font-size: 1.2em;
   cursor: pointer;
 
   &:hover {

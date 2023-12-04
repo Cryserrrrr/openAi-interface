@@ -60,7 +60,7 @@ export default function Home() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [model, setModel] = useState<models>(models.GPT4);
   const [isSideBarOpen, setIsSideBarOpen] = useState(false);
-  const [image, setImage] = useState<File | null>(null);
+  const [image, setImage] = useState<string | null>(null);
   const [inputValue, setInputValue] = useState('');
   const [messages, setMessages] = useState<Message[]>([
     {

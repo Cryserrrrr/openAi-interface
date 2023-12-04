@@ -5,7 +5,7 @@ import './globals.css'
 const inter = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
-  title: 'openAI interface',
+  title: 'OpenAI interface',
   description: 'Interface to use openAI API (GPT4, Dall-e 3, ...)',
 }
 

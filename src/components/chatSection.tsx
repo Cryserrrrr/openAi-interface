@@ -40,8 +40,8 @@ const MessageBox = styled.div<MessageBoxProps>`
   display: flex;
   align-items: flex-start;
   width: 100%;
-  background-color: ${props => props.isUser ? 'transparent' : props.theme.darkPrimary};
-  font-size: 1.2em;
+  background-color: ${props => props.isUser ? 'transparent' : props.theme.lightPrimary};
+  font-size: 1em;
   padding: 10px;
   border-radius: 10px;
   line-height: 1.5em;
@@ -77,6 +77,7 @@ const ImageBox = styled.div`
 const TextBox = styled.div`
   display: flex;
   align-items: center;
+  flex-direction: column;
   height: 100%;
 `;
 
@@ -115,7 +116,7 @@ export default function ChatSection({ messages, image, theme } : { messages: Mes
           </IconContainer>
           <TextBox>
             {message.image && (
-              <Image src={message.image} width={200} height={200} alt='User Image' />
+              <Image src={message.image} width={200} height={200} alt='User Image'/>
             )}
             <MarkdownReader source={message.text} />
           </TextBox>

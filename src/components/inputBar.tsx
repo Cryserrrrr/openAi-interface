@@ -95,7 +95,7 @@ const Select = styled.div`
   border-radius: 10px;
   border: none;
   color: #fff;
-  font-size: 1.2em;
+  font-size: 1em;
   outline: none;
   padding: 0 10px;
   display: flex;

@@ -3,7 +3,7 @@
 import styled from 'styled-components';
 import Image from 'next/image';
 
-import { Theme } from '@/utils/theme';
+import { Theme } from '@/models/models';
 import chatgptIcon from '../asset/chatgpticon.svg';
 
 const Container = styled.div`
@@ -11,13 +11,12 @@ const Container = styled.div`
   justify-content: space-between;
   align-items: center;
   padding: 0 20px;
+  margin-top: 20px;
   height: 60px;
   width: 50%;
   background-color: ${props => props.theme.primary};
   color: #fff;
   border-radius: 10px;
-  position: absolute;
-  top: 20px;
 
   transition: .5s;
 `;

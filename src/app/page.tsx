@@ -65,6 +65,8 @@ export default function Home() {
   const [isSideBarOpen, setIsSideBarOpen] = useState(false);
   const [image, setImage] = useState<string | null>(null);
   const [inputValue, setInputValue] = useState('');
+  const [abortRequest, setAbortRequest] = useState<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(false);
   const [messages, setMessages] = useState<Message[]>([
     {
       text: 'Hello, I am ChatGPT',
@@ -99,7 +101,18 @@ export default function Home() {
   }
 
   const handleRequest = () => {
-    sendRequest(inputValue, messages, model, setInputValue, setMessages, image, setImage)
+    sendRequest(
+      inputValue,
+      messages,
+      model,
+      setInputValue,
+      setMessages,
+      abortRequest,
+      setAbortRequest,
+      setLoading,
+      image,
+      setImage
+    )
   }
 
   return (
@@ -125,6 +138,9 @@ export default function Home() {
         setInputValue={setInputValue}
         handleRequest={handleRequest}
         textareaRef={textareaRef}
+        loading={loading}
+        abortRequest={abortRequest}
+        setAbortRequest={setAbortRequest}
       />
     </Container>
   )

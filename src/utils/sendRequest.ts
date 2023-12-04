@@ -7,6 +7,9 @@ export const sendRequest = async (
   model: models,
   setInputValue: (value: string) => void,
   setMessages: (value: Message[]) => void,
+  abortRequest: boolean,
+  setAbortRequest: (value: boolean) => void,
+  setLoading: (value: boolean) => void,
   image?: string | null,
   setImage?: (value: string | null) => void,
 ) => {
@@ -45,13 +48,11 @@ export const sendRequest = async (
     })
   setImage && setImage(null);
   setInputValue('');
-  console.log(openaiMessages);
-  const response = await gptCompletion(openaiMessages, model);
   tempMessages.push({
-    text: response.choices[0].message.content || 'An error occured',
+    text: '',
     isUser: false,
     model: model,
   })
-  console.log(response);
   setMessages(tempMessages);
+  gptCompletion(openaiMessages, model, tempMessages, setMessages, abortRequest, setAbortRequest, setLoading);
 }  

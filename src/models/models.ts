@@ -10,7 +10,7 @@ export enum models {
 export type Message = {
   text: string,
   isUser: boolean,
-  model: models | null,
+  model: models,
   image?: string | null,
 }
 

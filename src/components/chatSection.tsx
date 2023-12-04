@@ -1,12 +1,9 @@
 'use client';
 
-import { useEffect, useState, useRef, use } from 'react';
 import Image from 'next/image';
 import styled from 'styled-components';
 
 // Images
-import chatgpticon from '../asset/chatgpticon.svg';
-import gpt4 from '../asset/gpt4.svg';
 import user from '../asset/user.svg';
 
 // Models
@@ -14,6 +11,9 @@ import { Message, Theme } from '@/models/models';
 
 // markdownReader
 import MarkdownReader from '@/utils/markdownReader';
+
+// Icon function
+import Logo from '@/utils/modelsLogo';
 
 interface ContainerProps {
   image: string | null;
@@ -97,13 +97,7 @@ const TextBox = styled.div`
 export default function ChatSection({ messages, image, theme, textareaRef } : { messages: Message[], image: string | null, theme: Theme, textareaRef: any } ) {
 
   const renderIcon = (message: Message) => {
-    if (message.model === 'GPT-4' && !message.isUser) {
-      return (
-        <ImageDiv theme={theme}>
-          <Image src={gpt4} width={40} height={40} alt='GPT-4 Logo'/>
-        </ImageDiv>
-      )
-    } else if (message.isUser) {
+    if (message.isUser) {
       return (
         <ImageDiv theme={theme}>
           <ImageBox theme={theme}>
@@ -114,7 +108,7 @@ export default function ChatSection({ messages, image, theme, textareaRef } : { 
     } else {
       return (
         <ImageDiv theme={theme}>
-          <Image src={chatgpticon} width={40} height={40} alt='GPT-3 Logo' />
+          <Logo models={message.model} />
         </ImageDiv>
       )
     }

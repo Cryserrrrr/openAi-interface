@@ -10,8 +10,8 @@ export const sendRequest = (
   abortRequest: boolean,
   setAbortRequest: (value: boolean) => void,
   setLoading: (value: boolean) => void,
-  image?: string | null,
-  setImage?: (value: string | null) => void,
+  images?: string[] | null,
+  setImages?: (value: string[]) => void,
 ) => {
   if (inputValue === '') return;
 
@@ -20,7 +20,7 @@ export const sendRequest = (
     text: inputValue,
     isUser: true,
     model: model,
-    image: image && model === models.GPTVision ? image : null,
+    image: images && model === models.GPTVision ? images : null,
   })
 
   let openaiMessages: openaiMessage[] = []
@@ -33,12 +33,6 @@ export const sendRequest = (
             type: 'text',
             text: message.text,
           },
-          {
-            type: 'image_url',
-            image_url: {
-              url: message.image || '',
-            }
-          }
         ],
         role: message.isUser ? 'user' : 'assistant',
       })
@@ -48,9 +42,17 @@ export const sendRequest = (
         role: message.isUser ? 'user' : 'assistant',
       })
     }
+    message.image?.forEach(image => {
+      openaiMessages[openaiMessages.length - 1].content.push({
+        type: 'image_url',
+        image_url: {
+          url: image,
+        }
+      })
+    })
   })
 
-  setImage && setImage(null);
+  setImages && setImages([]);
   setInputValue('');
 
   tempMessages.push({

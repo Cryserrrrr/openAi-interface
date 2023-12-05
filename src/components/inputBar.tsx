@@ -17,8 +17,8 @@ interface InputBarProps {
   theme: Theme;
   handleModal: any;
   model: models;
-  image: any;
-  setImage: any;
+  images: string[] | null;
+  setImages: (images: string[]) => void;
   inputValue: string;
   setInputValue: any;
   handleRequest: any;
@@ -122,6 +122,8 @@ const ImagePreviewContainer = styled.div`
   background-color: ${props => props.theme.primary};
   border-radius: 10px 10px 0 0;
   padding: 10px;
+  display: flex;
+  align-items: center;
 `;
 
 const ImagePreviewDiv = styled.div`
@@ -164,8 +166,8 @@ export default function InputBar({
   theme,
   handleModal,
   model,
-  image,
-  setImage,
+  images,
+  setImages,
   inputValue,
   setInputValue,
   handleRequest,
@@ -201,16 +203,37 @@ export default function InputBar({
     const input = document.createElement('input');
     input.type = 'file';
     input.accept = 'image/*';
-    input.onchange = e => {
-      const file = e.target?.files[0];
-      const reader = new FileReader();
-      reader.readAsDataURL(file);
-      reader.onload = e => {
-        setImage(e.target?.result);
+    input.multiple = true;
+    input.onchange = async (e) => {
+      const files = e.target?.files;
+      if (!files || files.length === 0) {
+        return;
       }
-    }
+      const readFiles = async () => {
+        const base64Promises = Array.from(files).map((file) => {
+          return new Promise<string>((resolve) => {
+            const reader = new FileReader();
+            reader.onload = (event) => {
+              const result = event.target?.result;
+              if (typeof result === 'string') {
+                resolve(result);
+              }
+            };
+            reader.readAsDataURL(file);
+          });
+        });
+        const base64Results = await Promise.all(base64Promises);
+        if (images) {
+          const newImages = base64Results.filter((image: string) => !images.includes(image));
+          setImages([...images, ...newImages]);
+          return;
+        }
+        setImages(base64Results);
+      };
+      readFiles();
+    };
     input.click();
-  }
+  };
 
   const handleKeyPress = (e: any) => {
     if (e.key === 'Enter' && e.shiftKey) {
@@ -225,16 +248,28 @@ export default function InputBar({
     }
   }
 
+  const handleDeleteImage = (image: string) => {
+    const newImage = images?.filter((i: string) => i !== image);
+    setImages(newImage || []);
+  }
+
+
+  const renderImages = () => {
+    return images?.map((image: string, index: number) => (
+      <ImagePreviewDiv key={index}>
+        <DeleteButton onClick={() => handleDeleteImage(image)}>
+        <Image src={cross} alt="cross" width={20} height={20} />
+        </DeleteButton>
+        <Image src={image} alt="image" width={80} height={80} />
+      </ImagePreviewDiv>
+    ))
+  }
+
   return (
-    <Container haveimage={image && model === 'GPT-Vision' ? true : false}>
-      {image && model === 'GPT-Vision' && 
+    <Container haveimage={images?.length !== 0 && model === 'GPT-Vision' ? true : false}>
+      {images?.length !== 0 && model === models.GPTVision && 
         <ImagePreviewContainer theme={theme}>
-          <ImagePreviewDiv>
-            <DeleteButton onClick={() => setImage(null)}>
-              <Image src={cross} alt="cross" width={20} height={20} />
-            </DeleteButton>
-            <Image src={image} alt="image" width={80} height={80} />
-          </ImagePreviewDiv>
+          {renderImages()}
         </ImagePreviewContainer>
       }
       <SubContainer>
@@ -244,7 +279,7 @@ export default function InputBar({
             Stop the generation
           </AbortButton>
         :
-          <InputContainer theme={theme} image={image && model === models.GPTVision}>
+          <InputContainer theme={theme} image={images?.length !== 0 && model === models.GPTVision}>
             <Input 
               placeholder="Type your message..."
               onChange={(e: any) => handleChange(e)}

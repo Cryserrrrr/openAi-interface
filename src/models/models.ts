@@ -11,7 +11,7 @@ export type Message = {
   text: string,
   isUser: boolean,
   model: models,
-  image?: string | null,
+  image?: string[] | null,
 }
 
 export type Chat = {

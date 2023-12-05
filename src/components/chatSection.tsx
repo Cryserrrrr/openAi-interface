@@ -17,7 +17,7 @@ import MarkdownReader from '@/utils/markdownReader';
 import Logo from '@/utils/modelsLogo';
 
 interface ContainerProps {
-  image: string | null;
+  image: string[] | null;
   textareaRef: any;
 }
 
@@ -95,7 +95,7 @@ const TextBox = styled.div`
   transition: .5s;
 `;
 
-export default function ChatSection({ messages, image, theme, textareaRef } : { messages: Message[], image: string | null, theme: Theme, textareaRef: any } ) {
+export default function ChatSection({ messages, images, theme, textareaRef } : { messages: Message[], images: string[] | null, theme: Theme, textareaRef: any } ) {
 
   const containerRef = useRef(null);
 
@@ -128,6 +128,12 @@ export default function ChatSection({ messages, image, theme, textareaRef } : { 
     }
   }
 
+  const renderImages = (message: Message) => {
+    return message.image?.map((image, index) => (
+      <Image src={image} width={200} height={200} alt='User Image' key={index}/>
+    ))
+  }
+
   const renderMessages = () => {
     return messages?.map((message, index) => {
       return (
@@ -136,9 +142,7 @@ export default function ChatSection({ messages, image, theme, textareaRef } : { 
             {renderIcon(message)}
           </IconContainer>
           <TextBox theme={theme}>
-            {message.image && (
-              <Image src={message.image} width={200} height={200} alt='User Image'/>
-            )}
+            {message.image ? renderImages(message) : null}
             <MarkdownReader source={message.text} />
           </TextBox>
         </MessageBox>
@@ -147,7 +151,7 @@ export default function ChatSection({ messages, image, theme, textareaRef } : { 
   }
   return (
     <Container 
-      image={image}
+      image={images}
       textareaRef={textareaRef?.current?.clientHeight ? textareaRef.current.clientHeight : 0}
     >
       {renderMessages()}

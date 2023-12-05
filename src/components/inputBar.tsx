@@ -124,6 +124,7 @@ const ImagePreviewContainer = styled.div`
   padding: 10px;
   display: flex;
   align-items: center;
+  overflow-x: auto;
 `;
 
 const ImagePreviewDiv = styled.div`
@@ -133,6 +134,7 @@ const ImagePreviewDiv = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
+  margin-right: 10px;
 `;
 
 const DeleteButton = styled.div`
@@ -266,8 +268,8 @@ export default function InputBar({
   }
 
   return (
-    <Container haveimage={images?.length !== 0 && model === 'GPT-Vision' ? true : false}>
-      {images?.length !== 0 && model === models.GPTVision && 
+    <Container haveimage={images && images?.length !== 0 && model === 'GPT-Vision' ? true : false}>
+      {images && images?.length !== 0 && model === models.GPTVision && 
         <ImagePreviewContainer theme={theme}>
           {renderImages()}
         </ImagePreviewContainer>
@@ -279,7 +281,7 @@ export default function InputBar({
             Stop the generation
           </AbortButton>
         :
-          <InputContainer theme={theme} image={images?.length !== 0 && model === models.GPTVision}>
+          <InputContainer theme={theme} image={images && images?.length !== 0 && model === models.GPTVision}>
             <Input 
               placeholder="Type your message..."
               onChange={(e: any) => handleChange(e)}

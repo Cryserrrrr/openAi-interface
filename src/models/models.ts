@@ -14,6 +14,12 @@ export type Message = {
   image?: string | null,
 }
 
+export type Chat = {
+  id: number,
+  title: string,
+  messages: Message[],
+}
+
 export interface Theme {
   primary: string,
   darkPrimary: string,

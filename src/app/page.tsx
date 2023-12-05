@@ -3,20 +3,22 @@
 import { useEffect, useState, useRef } from 'react';
 
 import styled from 'styled-components';
-import Image from 'next/image';
 import { whiteTheme, blackTheme } from '@/utils/theme';
-import { Message, models, Theme } from '@/models/models';
 
-// Images
-import menu from '../asset/hamburger.svg';
+// Models
+import { Message, models, Theme, Chat } from '@/models/models';
 
 // Send Request
 import { sendRequest } from '@/utils/sendRequest';
+
+// Cookies
+import { useCookies } from 'next-client-cookies';
 
 import NavBar from '../components/navBar';
 import InputBar from '../components/inputBar';
 import Modal from '../components/modal';
 import ChatSection from '@/components/chatSection';
+import SideBar from '@/components/sideBar';
 
 const Container = styled.div`
   display: flex;
@@ -25,23 +27,6 @@ const Container = styled.div`
   width: 100%;
   height: 100vh;
   background-color: ${props => props.theme.background};
-
-  transition: .5s;
-`;
-
-const Button = styled.div`
-  width: 60px;
-  height: 60px;
-  border-radius: 10px;
-  border: 3px solid ${props => props.theme.primary};
-  background-color: transparent;
-  cursor: pointer;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  position: absolute;
-  top: 20px;
-  left: 20px;
 
   transition: .5s;
 `;
@@ -58,35 +43,72 @@ const choices = [
 export default function Home() {
 
   const textareaRef = useRef(null);
+  const cookieStore = useCookies();
 
   const [theme, setTheme] = useState<Theme>(blackTheme);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [model, setModel] = useState<models>(models.GPT4);
-  const [isSideBarOpen, setIsSideBarOpen] = useState(false);
   const [image, setImage] = useState<string | null>(null);
   const [inputValue, setInputValue] = useState('');
   const [abortRequest, setAbortRequest] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
   const [messages, setMessages] = useState<Message[]>([
     {
-      text: 'Hello, I am ChatGPT',
+      text: 'Hello, I am GPT-4.',
       isUser: false,
       model: models.GPT4,
     },
   ]);
+  const [allChats, setAllChats] = useState<Chat[]>([]);
+
+  useEffect(() => {
+    const chats = cookieStore.get('chats');
+    if (chats) {
+      setAllChats(JSON.parse(chats));
+    }
+  }, [])
 
   useEffect(() => {
     setIsModalOpen(false)
     if (messages.length === 1) {
       setMessages([
         {
-          text: `Hello, I am ${model}`,
+          text: `Hello, I am ${model}.`,
           isUser: false,
           model: model,
         }
       ])
     }
   }, [model])
+
+  useEffect(() => {
+    if (messages.length < 2) return
+    const chat = allChats.findIndex(chat => chat.title === messages[1].text.substring(0, 20));
+    if (chat === -1) {
+      setAllChats([
+        ...allChats,
+        {
+          id: allChats.length,
+          title: messages[1].text.substring(0, 20),
+          messages: messages,
+        }
+      ])
+    } else if (chat !== -1) {
+      const newChats = allChats;
+      newChats[chat].messages = messages;
+      setAllChats(newChats);
+    }
+  }, [messages])
+
+  useEffect(() => {
+    if (allChats.length === 0) {
+      const chats = cookieStore.get('chats');
+      const parsedChats = chats && JSON.parse(chats)
+      parsedChats.length === 1 && setAllChats(allChats);
+      return
+    }
+    cookieStore.set('chats', JSON.stringify(allChats));
+  }, [allChats])
 
   const handleTheme = () => {
     if (theme === whiteTheme) {
@@ -117,9 +139,13 @@ export default function Home() {
 
   return (
     <Container theme={theme}>
-      <Button onClick={() => setIsSideBarOpen(!isSideBarOpen)} theme={theme}>
-        <Image src={menu} width={40} height={40} alt="menu" />
-      </Button>
+      <SideBar
+        chat={allChats}
+        theme={theme}
+        setMessages={setMessages}
+        setModel={setModel}
+        setAllChats={setAllChats}
+      />
       <NavBar handleTheme={handleTheme} theme={theme}/>
       {isModalOpen && <Modal choices={choices} model={model} setModel={setModel} theme={theme}/>}
       <ChatSection

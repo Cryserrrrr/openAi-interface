@@ -48,7 +48,7 @@ export default function Home() {
   const [theme, setTheme] = useState<Theme>(blackTheme);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [model, setModel] = useState<models>(models.GPT4);
-  const [image, setImage] = useState<string | null>(null);
+  const [images, setImages] = useState<string[]>(null);
   const [inputValue, setInputValue] = useState('');
   const [abortRequest, setAbortRequest] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
@@ -132,8 +132,8 @@ export default function Home() {
       abortRequest,
       setAbortRequest,
       setLoading,
-      image,
-      setImage
+      images,
+      setImages
     )
   }
 
@@ -150,7 +150,7 @@ export default function Home() {
       {isModalOpen && <Modal choices={choices} model={model} setModel={setModel} theme={theme}/>}
       <ChatSection
         messages={messages}
-        image={image}
+        images={images}
         theme={theme}
         textareaRef={textareaRef}
       />
@@ -158,8 +158,8 @@ export default function Home() {
         theme={theme}
         handleModal={handleModal}
         model={model}
-        image={image}
-        setImage={setImage}
+        images={images}
+        setImages={setImages}
         inputValue={inputValue}
         setInputValue={setInputValue}
         handleRequest={handleRequest}

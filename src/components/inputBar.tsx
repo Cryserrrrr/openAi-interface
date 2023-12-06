@@ -164,6 +164,26 @@ const StyledStop = styled(Image)`
   margin-right: 15px;
 `;
 
+/**
+ * InputBar component
+ *
+ * @export
+ * @param {InputBarProps} { 
+ *   theme,
+ *   handleModal,
+ *   model,
+ *   images,
+ *   setImages,
+ *   inputValue,
+ *   setInputValue,
+ *   handleRequest,
+ *   textareaRef,
+ *   loading,
+ *   abortRequest,
+ *   setAbortRequest,
+ * }
+ * @return {*} 
+ */
 export default function InputBar({ 
   theme,
   handleModal,
@@ -181,6 +201,7 @@ export default function InputBar({
 
   const [haveicon, setHaveicon] = useState<boolean>(false);
 
+  // Resize the textarea when the user write a message
   useEffect(() => {
     const textarea = textareaRef.current;
     if (textarea) {
@@ -190,6 +211,7 @@ export default function InputBar({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [inputValue]);
 
+  // Change the icon in the inputBar is GPT-Vision
   useEffect(() => {
     if (model === 'GPT-Vision') {
       setHaveicon(true);
@@ -198,10 +220,23 @@ export default function InputBar({
     }
   }, [model]);
 
+  /**
+   * handleChange
+   * Handle the change of the input
+   * @param {React.ChangeEvent<HTMLTextAreaElement>}
+   * @return {void}
+   * @memberof InputBar
+   */
   const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setInputValue(e.target.value);
   };
 
+  /**
+   * openFolder
+   * Open the folder to select images
+   * @return {void}
+   * @memberof InputBar
+   */
   const openFolder = () => {
     const input = document.createElement('input');
     input.type = 'file';
@@ -238,6 +273,13 @@ export default function InputBar({
     input.click();
   };
 
+  /**
+   * handleKeyPress
+   * Handle the keypress of the user
+   * @param {React.KeyboardEvent<HTMLTextAreaElement>}
+   * @return {void}
+   * @memberof InputBar
+   */
   const handleKeyPress = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
     if (e.key === 'Enter' && e.shiftKey) {
       return;
@@ -251,12 +293,24 @@ export default function InputBar({
     }
   }
 
+  /**
+   * handleDeleteImage
+   * Handle the delete of an image
+   * @param {string}
+   * @return {void}
+   * @memberof InputBar
+   */
   const handleDeleteImage = (image: string) => {
     const newImage = images?.filter((i: string) => i !== image);
     setImages(newImage || []);
   }
 
-
+  /**
+   * renderImages
+   * Render the images
+   * @return {*}
+   * @memberof InputBar
+   */
   const renderImages = () => {
     return images?.map((image: string, index: number) => (
       <ImagePreviewDiv key={index}>

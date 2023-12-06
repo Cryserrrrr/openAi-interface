@@ -5,8 +5,8 @@ import { useEffect, useState, useRef } from 'react';
 import styled from 'styled-components';
 import { whiteTheme, blackTheme } from '@/utils/theme';
 
-// Models
-import { Message, models, Theme, Chat } from '@/models/models';
+// Types
+import { Message, models, Theme, Chat } from '@/types/types';
 
 // Send Request
 import { sendRequest } from '@/utils/sendRequest';
@@ -44,11 +44,13 @@ export default function Home() {
 
   const textareaRef = useRef(null);
   const cookieStore = useCookies();
+  
+  const cookiesChats = cookieStore.get('chats');
 
   const [theme, setTheme] = useState<Theme>(blackTheme);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [model, setModel] = useState<models>(models.GPT4);
-  const [images, setImages] = useState<string[]>(null);
+  const [images, setImages] = useState<string[]>([]);
   const [inputValue, setInputValue] = useState('');
   const [abortRequest, setAbortRequest] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
@@ -59,14 +61,7 @@ export default function Home() {
       model: models.GPT4,
     },
   ]);
-  const [allChats, setAllChats] = useState<Chat[]>([]);
-
-  useEffect(() => {
-    const chats = cookieStore.get('chats');
-    if (chats) {
-      setAllChats(JSON.parse(chats));
-    }
-  }, [])
+  const [chats, setChats] = useState<Chat[]>(cookiesChats ? JSON.parse(cookiesChats) : []);
 
   useEffect(() => {
     setIsModalOpen(false)
@@ -79,36 +74,41 @@ export default function Home() {
         }
       ])
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [model])
 
   useEffect(() => {
     if (messages.length < 2) return
-    const chat = allChats.findIndex(chat => chat.title === messages[1].text.substring(0, 20));
+    const chat = chats.findIndex(chat => chat.title === messages[1].text.substring(0, 20));
     if (chat === -1) {
-      setAllChats([
-        ...allChats,
+      setChats([
+        ...chats,
         {
-          id: allChats.length,
+          id: chats.length,
           title: messages[1].text.substring(0, 20),
           messages: messages,
         }
       ])
     } else if (chat !== -1) {
-      const newChats = allChats;
+      const newChats = chats;
       newChats[chat].messages = messages;
-      setAllChats(newChats);
+      setChats(newChats);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [messages])
 
   useEffect(() => {
-    if (allChats.length === 0) {
-      const chats = cookieStore.get('chats');
-      const parsedChats = chats && JSON.parse(chats)
-      parsedChats.length === 1 && setAllChats(allChats);
+    if (chats.length === 0) {
+      const actualCookiesChats = cookieStore.get('chats');
+      const parsedChats = actualCookiesChats && JSON.parse(actualCookiesChats)
+      parsedChats?.length === 1 && setChats([]);
+      cookieStore.remove('chats');
       return
+    } else {
+      cookieStore.set('chats', JSON.stringify(chats));
     }
-    cookieStore.set('chats', JSON.stringify(allChats));
-  }, [allChats])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [chats])
 
   const handleTheme = () => {
     if (theme === whiteTheme) {
@@ -140,11 +140,11 @@ export default function Home() {
   return (
     <Container theme={theme}>
       <SideBar
-        chat={allChats}
+        chats={chats}
         theme={theme}
         setMessages={setMessages}
         setModel={setModel}
-        setAllChats={setAllChats}
+        setChats={setChats}
       />
       <NavBar handleTheme={handleTheme} theme={theme}/>
       {isModalOpen && <Modal choices={choices} model={model} setModel={setModel} theme={theme}/>}

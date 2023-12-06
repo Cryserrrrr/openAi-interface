@@ -5,7 +5,7 @@ import { useEffect, useState, useRef, use } from 'react';
 import styled from 'styled-components';
 
 // Types
-import { models, Theme } from '@/models/models';
+import { models, Theme } from '@/types/types';
 
 // Theme
 import Image from 'next/image';
@@ -15,22 +15,22 @@ import stop from '../asset/stop.svg';
 
 interface InputBarProps {
   theme: Theme;
-  handleModal: any;
+  handleModal: () => void;
   model: models;
   images: string[] | null;
   setImages: (images: string[]) => void;
   inputValue: string;
-  setInputValue: any;
-  handleRequest: any;
+  setInputValue: (inputValue: string) => void;
+  handleRequest: () => void;
   textareaRef: any;
   loading: boolean;
   abortRequest: boolean;
-  setAbortRequest: any;
+  setAbortRequest: (abortRequest: boolean) => void;
 }
 
 interface InputContainerProps {
   theme: Theme;
-  image: any;
+  image: boolean | null;
 }
 
 interface InputProps {
@@ -187,6 +187,7 @@ export default function InputBar({
       textarea.style.height = 'auto';
       textarea.style.height = `${textarea.scrollHeight}px`;
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [inputValue]);
 
   useEffect(() => {
@@ -197,7 +198,7 @@ export default function InputBar({
     }
   }, [model]);
 
-  const handleChange = (e: any) => {
+  const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setInputValue(e.target.value);
   };
 
@@ -207,7 +208,7 @@ export default function InputBar({
     input.accept = 'image/*';
     input.multiple = true;
     input.onchange = async (e) => {
-      const files = e.target?.files;
+      const files = (e.target as HTMLInputElement).files;
       if (!files || files.length === 0) {
         return;
       }
@@ -237,7 +238,7 @@ export default function InputBar({
     input.click();
   };
 
-  const handleKeyPress = (e: any) => {
+  const handleKeyPress = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
     if (e.key === 'Enter' && e.shiftKey) {
       return;
     }
@@ -284,7 +285,7 @@ export default function InputBar({
           <InputContainer theme={theme} image={images && images?.length !== 0 && model === models.GPTVision}>
             <Input 
               placeholder="Type your message..."
-              onChange={(e: any) => handleChange(e)}
+              onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => handleChange(e)}
               value={inputValue}
               ref={textareaRef}
               haveicon={haveicon}

@@ -1,7 +1,7 @@
 import OpenAI from "openai";
 
-// Models
-import { openaiModelsMap, openaiMessage, models, Message } from "./models/models";
+// Types
+import { openaiModelsMap, models, Message } from "./types/types";
 import { abort } from "process";
 
 const openai = new OpenAI({

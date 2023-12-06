@@ -3,7 +3,7 @@
 import styled from 'styled-components';
 import Image from 'next/image';
 
-import { Theme } from '@/models/models';
+import { Theme } from '@/types/types';
 import logoSmallWhite from '../asset/logo_small_white.png';
 
 const Container = styled.div`

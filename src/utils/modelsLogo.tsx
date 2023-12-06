@@ -1,7 +1,7 @@
 'use client'
 
 import LogoSmallWhite from '../asset/logo_small_white.png';
-import { models } from '@/models/models';
+import { models } from '@/types/types';
 import styled from 'styled-components';
 import Image from 'next/image';
 

@@ -1,4 +1,6 @@
-export const whiteTheme = {
+import { Theme } from '../types/types'
+
+export const whiteTheme: Theme = {
   primary: '#494949',
   lightPrimary: '#c2c2c2',
   background: '#f2f2f2',
@@ -7,7 +9,7 @@ export const whiteTheme = {
   colorChat: '#000',
 }
 
-export const blackTheme = {
+export const blackTheme: Theme = {
   primary: '#1a1a1a',
   lightPrimary: '#2a2a34',
   background: '#343541',

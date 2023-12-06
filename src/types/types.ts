@@ -22,10 +22,11 @@ export type Chat = {
 
 export interface Theme {
   primary: string,
-  darkPrimary: string,
+  lightPrimary: string,
   background: string,
   text: string,
   unselected: string,
+  colorChat: string,
 }
 
 export enum openaiModels {

@@ -1,4 +1,4 @@
-import { Message, models, openaiMessage } from '@/models/models';
+import { Message, models, openaiMessage } from '@/types/types';
 import { gptCompletion } from '@/api';
 
 export const sendRequest = (
@@ -43,6 +43,7 @@ export const sendRequest = (
       })
     }
     message.image?.forEach(image => {
+      // @ts-expect-error
       openaiMessages[openaiMessages.length - 1].content.push({
         type: 'image_url',
         image_url: {

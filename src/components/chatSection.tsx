@@ -7,8 +7,8 @@ import { useEffect, useRef } from 'react';
 // Images
 import user from '../asset/user.svg';
 
-// Models
-import { Message, Theme } from '@/models/models';
+// Types
+import { Message, Theme } from '@/types/types';
 
 // markdownReader
 import MarkdownReader from '@/utils/markdownReader';
@@ -24,6 +24,13 @@ interface ContainerProps {
 interface MessageBoxProps {
   isUser: boolean;
   theme: Theme;
+}
+
+interface ChatSectionProps {
+  messages: Message[];
+  images: string[] | null;
+  theme: Theme;
+  textareaRef: React.RefObject<HTMLElement>;
 }
 
 const Container = styled.div<ContainerProps>`
@@ -95,13 +102,17 @@ const TextBox = styled.div`
   transition: .5s;
 `;
 
-export default function ChatSection({ messages, images, theme, textareaRef } : { messages: Message[], images: string[] | null, theme: Theme, textareaRef: any } ) {
+export default function ChatSection({
+  messages,
+  images,
+  theme,
+  textareaRef
+} : ChatSectionProps ) {
 
-  const containerRef = useRef(null);
+  const containerRef = useRef<HTMLDivElement | null>(null);
 
   const scrollToBottom = () => {
     if (containerRef.current) {
-      // @ts-ignore
       containerRef.current?.scrollIntoView({ behavior: "smooth" })
     }
   }
@@ -152,7 +163,7 @@ export default function ChatSection({ messages, images, theme, textareaRef } : {
   return (
     <Container 
       image={images}
-      textareaRef={textareaRef?.current?.clientHeight ? textareaRef.current.clientHeight : 0}
+      textareaRef={textareaRef?.current?.clientHeight ? (textareaRef.current.clientHeight as number) : 0}
     >
       {renderMessages()}
       <div ref={containerRef}></div>

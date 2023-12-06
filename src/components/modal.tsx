@@ -2,6 +2,16 @@
 
 import styled from 'styled-components';
 
+// Types
+import { Theme } from '@/types/types';
+
+interface ModalProps {
+  choices: string[];
+  model: string;
+  setModel: (model: string) => void;
+  theme: Theme;
+}
+
 const Container = styled.div`
   display: flex;
   flex-direction: column;
@@ -53,7 +63,12 @@ const SelectedChoice = styled(Choice)`
   color: ${props => props.theme.text};
 `;
 
-export default function Modal({choices, model, setModel, theme}: {choices: string[], model: string, setModel: any, theme: any}) {
+export default function Modal({
+  choices,
+  model,
+  setModel,
+  theme
+}: ModalProps) {
 
   return (
     <Container theme={theme}>

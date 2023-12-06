@@ -83,7 +83,7 @@ export default function Home() {
       setChats([
         ...chats,
         {
-          id: chats.length,
+          id: chats[chats.length - 1]?.id + 1 || 0,
           title: messages[1].text.substring(0, 20),
           messages: messages,
         }

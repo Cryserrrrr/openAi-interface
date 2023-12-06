@@ -195,7 +195,7 @@ export default function ChatSection({
             {message.image ? renderImages(message) : null}
             <MarkdownPreview
               source={message.text}
-              style={{ backgroundColor: 'transparent', width: '90%' }}
+              style={{ backgroundColor: 'transparent', width: '100%' }}
             />
           </TextBox>
         </MessageBox>

@@ -43,7 +43,7 @@ const Container = styled.div<ContainerProps>`
   display: flex;
   flex-direction: column;
   margin: 20px 0;
-  padding-right: 10px;
+  padding: 0 10px;
 
   transition: .5s;
 `;

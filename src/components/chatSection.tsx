@@ -194,7 +194,7 @@ export default function ChatSection({
           <TextBox theme={theme}>
             {message.image ? renderImages(message) : null}
             {message.isUser ?
-              message.text 
+              <pre>{message.text}</pre>
             :
               <MarkdownPreview
                 source={message.text}

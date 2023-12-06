@@ -272,7 +272,7 @@ export default function SideBar({chats, theme, setMessages, setModel, setChats} 
               </ChatDiv>
             ))}
             <BottomButton>
-              <BottomChatDiv theme={theme} onClick={deleteAllChats}>
+              <BottomChatDiv theme={theme} onClick={() => deleteAllChats()}>
                 <ChatTitleDiv deleteConfirm={false} >
                   <ChatIconDiv>
                   </ChatIconDiv>

@@ -193,10 +193,14 @@ export default function ChatSection({
           </IconContainer>
           <TextBox theme={theme}>
             {message.image ? renderImages(message) : null}
-            <MarkdownPreview
-              source={message.text}
-              style={{ backgroundColor: 'transparent', width: '100%' }}
-            />
+            {message.isUser ?
+              message.text 
+            :
+              <MarkdownPreview
+                source={message.text}
+                style={{ backgroundColor: 'transparent', width: '100%' }}
+              />
+            }
           </TextBox>
         </MessageBox>
       )

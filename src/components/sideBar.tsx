@@ -156,11 +156,25 @@ const ChatDeleteDiv = styled.div<ChatTitleDivProps>`
   transition: .5s;
 `;
 
+/**
+ * SideBar
+ *
+ * @export
+ * @param {SideBarProps} {chats, theme, setMessages, setModel, setChats}
+ * @return {*} 
+ */
 export default function SideBar({chats, theme, setMessages, setModel, setChats} : SideBarProps) {
 
   const [isSideBarOpen, setIsSideBarOpen] = useState<boolean>(false);
   const [deleteConfirm, setDeleteConfirm] = useState<number | null>(null);
 
+  /**
+   * createNewMessage
+   * Creates a new message
+   * 
+   * @return {*}
+   * @memberof SideBar
+   */
   const createNewMessage = () => {
     const newMessage: Message = {
       text: 'Hello, I am GPT-4.',
@@ -172,11 +186,27 @@ export default function SideBar({chats, theme, setMessages, setModel, setChats} 
     setIsSideBarOpen(!isSideBarOpen);
   }
 
+  /**
+   * handlePress
+   * Handles the press on a chat
+   * 
+   * @param {Message[]}
+   * @return {*}
+   * @memberof SideBar
+   */
   const handlePress = (messages: Message[]) => {
     setMessages(messages);
     setIsSideBarOpen(!isSideBarOpen);
   }
 
+  /**
+   * deleteChat
+   * Deletes a chat
+   * 
+   * @param {number}
+   * @return {*}
+   * @memberof SideBar
+  */
   const deleteChat = (id: number) => {
     const newChat = chats.filter(c => c.id !== id);
     setDeleteConfirm(null);

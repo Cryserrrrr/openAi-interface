@@ -102,6 +102,18 @@ const TextBox = styled.div`
   transition: .5s;
 `;
 
+/**
+ * ChatSection
+ *
+ * @export
+ * @param {ChatSectionProps} {
+ *   messages,
+ *   images,
+ *   theme,
+ *   textareaRef
+ * }
+ * @return {*} 
+ */
 export default function ChatSection({
   messages,
   images,
@@ -111,16 +123,31 @@ export default function ChatSection({
 
   const containerRef = useRef<HTMLDivElement | null>(null);
 
+  /**
+   * scrollToBottom
+   * Scroll to the bottom of the chat when assisstant is writing
+   * @return {void}
+   * @memberof ChatSection
+   */
   const scrollToBottom = () => {
     if (containerRef.current) {
       containerRef.current?.scrollIntoView({ behavior: "smooth" })
     }
   }
 
+  // Call scrollToBottom when messages change
   useEffect(() => {
     scrollToBottom()
   }, [messages])
 
+
+  /**
+   * renderIcon
+   * Render the icon of the message
+   * @param {Message} message
+   * @return {*} 
+   * @memberof ChatSection
+   */
   const renderIcon = (message: Message) => {
     if (message.isUser) {
       return (
@@ -139,12 +166,25 @@ export default function ChatSection({
     }
   }
 
+  /**
+   * renderImages
+   * Render the images of the message
+   * @param {Message}
+   * @return {void}
+   * @memberof ChatSection
+   */
   const renderImages = (message: Message) => {
     return message.image?.map((image, index) => (
       <Image src={image} width={200} height={200} alt='User Image' key={index}/>
     ))
   }
 
+  /**
+   * renderMessages
+   * Render the messages
+   * @return {*}
+   * @memberof ChatSection
+   */
   const renderMessages = () => {
     return messages?.map((message, index) => {
       return (
@@ -160,6 +200,7 @@ export default function ChatSection({
       )
     })
   }
+
   return (
     <Container 
       image={images}

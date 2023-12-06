@@ -31,15 +31,12 @@ const Container = styled.div`
   transition: .5s;
 `;
 
-const choices = [
-  'GPT-4',
-  'GPT-3',
-  'GPT-Vision',
-  'Text-To-Speech',
-  'Speech-To-Text',
-  'Dall-E 3',
-];
-
+/**
+ *  Home page
+ *
+ * @export
+ * @return {*} 
+ */
 export default function Home() {
 
   const textareaRef = useRef(null);
@@ -63,6 +60,7 @@ export default function Home() {
   ]);
   const [chats, setChats] = useState<Chat[]>(cookiesChats ? JSON.parse(cookiesChats) : []);
 
+  // Update first message when model change
   useEffect(() => {
     setIsModalOpen(false)
     if (messages.length === 1) {
@@ -77,6 +75,7 @@ export default function Home() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [model])
 
+  // Update chats when messages change
   useEffect(() => {
     if (messages.length < 2) return
     const chat = chats.findIndex(chat => chat.title === messages[1].text.substring(0, 20));
@@ -97,6 +96,7 @@ export default function Home() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [messages])
 
+  // Update cookies when chats change
   useEffect(() => {
     if (chats.length === 0) {
       const actualCookiesChats = cookieStore.get('chats');
@@ -110,6 +110,11 @@ export default function Home() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [chats])
 
+  /**
+   * Handle theme
+   * Change theme of the App
+   * @returns {void}
+   */
   const handleTheme = () => {
     if (theme === whiteTheme) {
       setTheme(blackTheme);
@@ -118,10 +123,20 @@ export default function Home() {
     }
   }
 
+  /**
+   * Handle modal
+   * Open or close modal
+   * @returns {void}
+   */
   const handleModal = () => {
     setIsModalOpen(!isModalOpen)
   }
 
+  /**
+   * Handle request
+   * Send request to the API
+   * @returns {void}
+   */
   const handleRequest = () => {
     sendRequest(
       inputValue,
@@ -147,7 +162,7 @@ export default function Home() {
         setChats={setChats}
       />
       <NavBar handleTheme={handleTheme} theme={theme}/>
-      {isModalOpen && <Modal choices={choices} model={model} setModel={setModel} theme={theme}/>}
+      {isModalOpen && <Modal model={model} setModel={setModel} theme={theme}/>}
       <ChatSection
         messages={messages}
         images={images}

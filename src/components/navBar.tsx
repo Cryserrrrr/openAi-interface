@@ -72,6 +72,13 @@ const Switch = styled.label`
   }
 `;
 
+/**
+ * NavBar
+ *
+ * @export
+ * @param {{ handleTheme: any, theme: Theme }} { handleTheme, theme }
+ * @return {*} 
+ */
 export default function NavBar({ handleTheme, theme }: { handleTheme: any, theme: Theme }) {
 
   return (

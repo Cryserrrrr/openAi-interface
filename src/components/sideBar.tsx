@@ -18,6 +18,9 @@ import { Chat, Theme, Message, models } from '@/types/types';
 // Icon function
 import Logo from '@/utils/modelsLogo';
 
+// Cookies
+import { useCookies } from 'next-client-cookies';
+
 interface SideBarProps {
   chats: Chat[];
   theme: Theme;
@@ -59,6 +62,7 @@ const SubContainer = styled.div`
   overflow-y: auto;
   background-color: ${props => props.theme.primary};
   padding: 20px;
+  position: relative;
 `;
 
 const Button = styled.div`
@@ -110,13 +114,15 @@ const ChatContainer = styled.div`
   flex-direction: column;
   width: 100%;
   margin-top: 20px;
+  overflow-y: auto;
+  height: calc(100% - 130px);
 `;
 
 const ChatDiv = styled.div`
   display: flex;
   align-items: center;
   width: 100%;
-  height: 60px;
+  min-height: 60px;
   border: 2px solid ${props => props.theme.lightPrimary};
   border-radius: 10px;
   margin: 10px 0;
@@ -156,6 +162,22 @@ const ChatDeleteDiv = styled.div<ChatTitleDivProps>`
   transition: .5s;
 `;
 
+const BottomButton = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 90%;
+  height: 60px;
+  position: absolute;
+  bottom: 20px;
+`;
+
+const BottomChatDiv = styled(ChatDiv)`
+  background-color: ${props => props.theme.lightPrimary};
+  border: none;
+  z-index: 2;
+`;
+
 /**
  * SideBar
  *
@@ -165,6 +187,7 @@ const ChatDeleteDiv = styled.div<ChatTitleDivProps>`
  */
 export default function SideBar({chats, theme, setMessages, setModel, setChats} : SideBarProps) {
 
+  const cookieStore = useCookies();
   const [isSideBarOpen, setIsSideBarOpen] = useState<boolean>(false);
   const [deleteConfirm, setDeleteConfirm] = useState<number | null>(null);
 
@@ -213,6 +236,11 @@ export default function SideBar({chats, theme, setMessages, setModel, setChats} 
     setChats(newChat);
   }
 
+  const deleteAllChats = () => {
+    setChats([]);
+    cookieStore.remove('chats');
+  }
+
   return (
     <>
       <Container isSideBarOpen={isSideBarOpen} theme={theme}>
@@ -223,8 +251,8 @@ export default function SideBar({chats, theme, setMessages, setModel, setChats} 
             <BackArrow src={arrowBackFill} width={30} height={30} alt="arrow back" onClick={() => setIsSideBarOpen(!isSideBarOpen)} />
           </TitleDiv>
           <ChatContainer>
-            {chats.map((c: Chat) => (
-              <ChatDiv key={c.id}>
+            {chats.map((c: Chat, index: number) => (
+              <ChatDiv key={index}>
                 <ChatTitleDiv deleteConfirm={deleteConfirm === c.id ? true : false} onClick={() => handlePress(c.messages)}>
                   <ChatIconDiv>
                     <Logo models={c.messages[0].model} />
@@ -243,6 +271,18 @@ export default function SideBar({chats, theme, setMessages, setModel, setChats} 
                 </ChatDeleteDiv>
               </ChatDiv>
             ))}
+            <BottomButton>
+              <BottomChatDiv theme={theme} onClick={deleteAllChats}>
+                <ChatTitleDiv deleteConfirm={false} >
+                  <ChatIconDiv>
+                  </ChatIconDiv>
+                  <ChatTitle>Delete all chats</ChatTitle>
+                </ChatTitleDiv>
+                <ChatDeleteDiv deleteConfirm={false}>
+                  <ChatDelete src={trash} width={20} height={20} alt="delete chat" />
+                </ChatDeleteDiv>
+              </BottomChatDiv>
+            </BottomButton>
           </ChatContainer>
         </SubContainer>
       </Container>

@@ -11,7 +11,7 @@ import user from '../asset/user.svg';
 import { Message, Theme } from '@/types/types';
 
 // markdownReader
-import MarkdownReader from '@/utils/markdownReader';
+import MarkdownPreview from '@uiw/react-markdown-preview';
 
 // Icon function
 import Logo from '@/utils/modelsLogo';
@@ -37,7 +37,6 @@ const Container = styled.div<ContainerProps>`
   max-height: ${props => props.image ? 'calc(100vh - 400px)' : `calc(100vh - 200px - ${props.textareaRef}px)`};
   width: 50%;
   color: #fff;
-  border-radius: 10px;
   overflow-y: auto;
   overflow-x: hidden;
   display: flex;
@@ -194,7 +193,10 @@ export default function ChatSection({
           </IconContainer>
           <TextBox theme={theme}>
             {message.image ? renderImages(message) : null}
-            <MarkdownReader source={message.text} />
+            <MarkdownPreview
+              source={message.text}
+              style={{ backgroundColor: 'transparent' }}
+            />
           </TextBox>
         </MessageBox>
       )
@@ -203,8 +205,8 @@ export default function ChatSection({
 
   return (
     <Container 
-      image={images}
-      textareaRef={textareaRef?.current?.clientHeight ? (textareaRef.current.clientHeight as number) : 0}
+      image={images && images?.length !== 0 ? images : null}
+      textareaRef={textareaRef?.current?.clientHeight ? (textareaRef.current.clientHeight as number) : 5}
     >
       {renderMessages()}
       <div ref={containerRef}></div>

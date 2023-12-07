@@ -176,6 +176,7 @@ const BottomChatDiv = styled(ChatDiv)`
   background-color: ${props => props.theme.lightPrimary};
   border: none;
   z-index: 2;
+  color: ${props => props.theme.colorChat};
 `;
 
 /**
@@ -279,7 +280,7 @@ export default function SideBar({chats, theme, setMessages, setModel, setChats} 
                   <ChatTitle>Delete all chats</ChatTitle>
                 </ChatTitleDiv>
                 <ChatDeleteDiv deleteConfirm={false}>
-                  <ChatDelete src={trash} width={20} height={20} alt="delete chat" />
+                  <ChatDelete src={trash} width={20} height={20} alt="delete chat"/>
                 </ChatDeleteDiv>
               </BottomChatDiv>
             </BottomButton>

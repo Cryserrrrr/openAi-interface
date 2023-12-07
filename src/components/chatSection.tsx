@@ -198,7 +198,7 @@ export default function ChatSection({
             :
               <MarkdownPreview
                 source={message.text}
-                style={{ backgroundColor: 'transparent', width: '100%' }}
+                style={{ backgroundColor: 'transparent', width: '100%', color: theme.colorChat }}
               />
             }
           </TextBox>

@@ -92,6 +92,10 @@ export default function Home() {
       const newChats = chats;
       newChats[chat].messages = messages;
       setChats(newChats);
+      cookieStore.set('chats', JSON.stringify(chats));
+    }
+    if (!messages[messages.length - 1].isUser) {
+      setModel(messages[messages.length - 1].model);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [messages])
